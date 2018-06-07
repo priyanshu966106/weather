@@ -1,11 +1,14 @@
 import * as React from 'react';
 import {Button,Form} from 'react-bootstrap'
+import {DateRen} from './DateRen';
+import {Web_loader} from './Web_loader';
 export interface IFrontPageState {
-    country: any;
+    country: any; 
     reps:any;
     icon:''
+    showWeaStat:boolean
+    showLoader:boolean
 }
-
 
 export class FormPage extends React.Component<any,IFrontPageState>{
  
@@ -14,7 +17,9 @@ export class FormPage extends React.Component<any,IFrontPageState>{
         this.state={
            country: "india",
            reps:'',
-           icon:''
+           icon:'',
+           showWeaStat:false,
+           showLoader:true
         }
     }
   
@@ -24,6 +29,7 @@ handleChange=(event:any)=>{
 
 showState=()=>{
     console.log("called");
+    this.setState({showLoader:true})
   let cstring:string=this.state.country;
   const AppId:string="f7aa90d5e6f9b6337399b73f70e00b0a";
   const url:string=`http://api.openweathermap.org/data/2.5/weather?q=${cstring}&APPID=${AppId}`;
@@ -33,11 +39,12 @@ showState=()=>{
 
   }).then(response => response.json())
      .then(json=>this.setState({reps:json.weather[0].description,icon:json.weather[0].icon}));
-      
+    this.setState({showLoader:false});  
+    this.setState({showWeaStat:true})
     
 }
 
-    public render(){
+public render(){
        
 return(
 
@@ -49,10 +56,15 @@ return(
         <Button bsStyle="primary"  onClick={this.showState}>
           Find weather
         </Button><br/><br/>
-        <img src={`http://openweathermap.org/img/w/${this.state.icon}.png`} />{this.state.reps}
+        
     </Form>
- 
-</div>
+     { this.state.showWeaStat?
+     <DateRen imgUrl={`http://openweathermap.org/img/w/${this.state.icon}.png`} weatherCondition={this.state.reps}/>
+     :
+     <div><Web_loader  showLoaderp={this.state.showLoader} /> </div>
+     }
+     
+     </div>
 
 )
 }}

@@ -1,8 +1,10 @@
 import * as React from 'react';
-import loaderr from '../assets/wpic.png'
+import loaderr from '../assets/load.gif';
+
 export interface ILoaderProps{
     showLoaderp:boolean;
 }
+
 export class Web_loader extends React.Component<ILoaderProps>{
     constructor(props:ILoaderProps)
     {
